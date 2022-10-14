@@ -230,8 +230,9 @@ class Command(BaseCommand):
                     field_names = set()
                     for meta_field in meta_fields:
                         if meta_field.concrete:
-                            field_names.add(meta_field.name)
+                            field_names.add(meta_field.column)
                     field_names -= excluded_fields
+                    field_names -= set('{}_id'.format(excluded_field) for excluded_field in excluded_fields)
 
                     queryset = objects.using(using).order_by(model._meta.pk.name).values(*field_names)
                     if primary_keys:
