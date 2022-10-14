@@ -107,7 +107,7 @@ class Command(BaseCommand):
             action="append",
             default=[],
             help="An model_field to exclude "
-            "(use multiple --exclude to exclude multiple fields)."
+            "(use multiple --exclude to exclude multiple fields).",
         )
 
     def handle(self, *app_labels, **options):
@@ -232,15 +232,24 @@ class Command(BaseCommand):
                         if meta_field.concrete:
                             field_names.add(meta_field.column)
                     field_names -= excluded_fields
-                    field_names -= set('{}_id'.format(excluded_field) for excluded_field in excluded_fields)
+                    field_names -= set(
+                        "{}_id".format(excluded_field)
+                        for excluded_field in excluded_fields
+                    )
 
-                    queryset = objects.using(using).order_by(model._meta.pk.name).values(*field_names)
+                    queryset = (
+                        objects.using(using)
+                        .order_by(model._meta.pk.name)
+                        .values(*field_names)
+                    )
                     if primary_keys:
                         queryset = queryset.filter(pk__in=primary_keys)
                     if count_only:
                         yield queryset.order_by().count()
                     else:
-                        yield from [model(**attributes) for attributes in queryset.iterator()]
+                        yield from [
+                            model(**attributes) for attributes in queryset.iterator()
+                        ]
 
         try:
             self.stdout.ending = None
