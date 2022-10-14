@@ -1,0 +1,18 @@
+# python files
+*.pyc
+__pycache__/
+.venv
+
+# secret files
+*.env
+
+# log files
+*.log
+
+# Editor / IDE settings files
+.vscode
+*.code-workspace
+.idea/
+
+# not required staging directories
+tmp/

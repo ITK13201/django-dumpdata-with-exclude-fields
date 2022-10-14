@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+    python:
+        build:
+            context: .
+            dockerfile: ./docker/python/Dockerfile
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - ./src:/src
+            - ./log/python:/var/log/python
+        ports:
+            - "8000:8000"
+        environment:
+            DATABASE_DB: "sample"
+            DATABASE_USER: "user"
+            DATABASE_PASSWORD: "password"
+            DATABASE_HOST: "mysql"
+            DATABASE_PORT: "3306"
+        env_file: ./src/.env
+        depends_on:
+            - mysql
+    mysql:
+        build:
+            dockerfile: ./docker/mysql/Dockerfile
+            context: .
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_USER: "user"
+            MYSQL_PASSWORD: "password"
+            MYSQL_DATABASE: "sample"
+            TZ: "Asia/Tokyo"
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./docker/mysql/conf.d:/etc/mysql/conf.d
+            - mysql:/var/lib/mysql
+            - ./log/mysql:/var/log/mysql
+
+volumes:
+    mysql:
+        driver: local
