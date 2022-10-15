@@ -225,7 +225,7 @@ class Command(BaseCommand):
                     else:
                         objects = model._default_manager
 
-                    # get model field names
+                    # get model fields and its db_column
                     meta_fields = model._meta.get_fields()
                     column_names = set()
                     for meta_field in meta_fields:
