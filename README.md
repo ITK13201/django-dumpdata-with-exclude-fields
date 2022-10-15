@@ -1,5 +1,7 @@
 # Django Dumpdata with Exclude Fields
 
+This is an extension of django's built-in batch file "dumpdata". Add "exclude-field" label to exclude certain columns from the fixture.
+
 ## Usage
 
 ```shell
