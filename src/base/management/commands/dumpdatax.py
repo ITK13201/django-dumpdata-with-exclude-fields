@@ -1,5 +1,4 @@
-# Dumpdata with exclude fields
-# This is extension of https://github.com/django/django/blob/main/django/core/management/commands/dumpdata.py
+# This is an extension of https://github.com/django/django/blob/7119f40c9881666b6f9b5cf7df09ee1d21cc8344/django/core/management/commands/dumpdata.py
 
 import gzip
 import os
