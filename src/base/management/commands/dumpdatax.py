@@ -227,20 +227,22 @@ class Command(BaseCommand):
 
                     # get model field names
                     meta_fields = model._meta.get_fields()
-                    field_names = set()
+                    column_names = set()
                     for meta_field in meta_fields:
                         if meta_field.concrete:
-                            field_names.add(meta_field.column)
-                    field_names -= excluded_fields
-                    field_names -= set(
-                        "{}_id".format(excluded_field)
-                        for excluded_field in excluded_fields
-                    )
+                            column_names.add(meta_field.column)
+
+                    # convert excluded field name to db_column
+                    excluded_column_names = set()
+                    for excluded_field in excluded_fields:
+                        excluded_meta_field = model._meta.get_field(excluded_field)
+                        excluded_column_names.add(excluded_meta_field.column)
+                    column_names -= excluded_column_names
 
                     queryset = (
                         objects.using(using)
                         .order_by(model._meta.pk.name)
-                        .values(*field_names)
+                        .values(*column_names)
                     )
                     if primary_keys:
                         queryset = queryset.filter(pk__in=primary_keys)
